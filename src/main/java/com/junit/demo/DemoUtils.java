@@ -1,4 +1,4 @@
-package org.junit.demo;
+package com.junit.demo;
 
 import java.util.List;
 
