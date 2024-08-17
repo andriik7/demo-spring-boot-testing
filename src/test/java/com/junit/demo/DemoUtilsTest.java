@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
+import java.time.Duration;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -83,4 +85,40 @@ class DemoUtilsTest {
         assertTrue(demoUtils.isGreater(1, -2), "Must be true");
         assertFalse(demoUtils.isGreater(5, 5), "Must be false");
     }
+
+    @Test
+    void testArrayEquals() {
+        String[] testArray = new String[]{"A", "B", "C"};
+
+        assertArrayEquals(testArray, demoUtils.getFirstThreeLettersOfAlphabet(), "Those are not first three letters of an alphabet");
+    }
+
+    @Test
+    void testIterableEquals() {
+        List<String> testList = List.of("luv", "2", "code");
+
+        assertIterableEquals(testList, demoUtils.getAcademyInList(), "Incorrect academy list provided");
+    }
+
+    @Test
+    void testLinesEquals() {
+        List<String> testList = List.of("luv", "2", "code");
+
+        assertLinesMatch(testList, demoUtils.getAcademyInList(), "Incorrect academy list provided");
+    }
+
+    @Test
+    void testExceptionThrow() {
+
+        assertThrows(Exception.class, () -> demoUtils.throwException(-1), "Must throw Exception.class");
+
+        assertDoesNotThrow(() -> demoUtils.throwException(5), "Must not throw any exception");
+    }
+
+    @Test
+    void testTimeout() {
+
+        assertTimeout(Duration.ofSeconds(3), () -> demoUtils.checkTimeout(), "Should not last that long");
+    }
+
 }
