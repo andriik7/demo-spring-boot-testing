@@ -1,9 +1,7 @@
 package com.junit.demo;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.*;
 
 import java.lang.reflect.Method;
 import java.time.Duration;
@@ -12,6 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayNameGeneration(DemoUtilsTest.ReplaceCamelCase.class)
+@TestMethodOrder(MethodOrderer.DisplayName.class)
 class DemoUtilsTest {
 
     static class ReplaceCamelCase extends DisplayNameGenerator.Standard {
@@ -33,6 +32,8 @@ class DemoUtilsTest {
         private String replaceCapitals(String name) {
             name = name.replaceAll("([A-Z])", " $1");
             name = name.replaceAll("([0-9]+)", " $1");
+            if (name.startsWith("test"))
+                name = name.substring(5);
             return name;
         }
     }
@@ -61,14 +62,14 @@ class DemoUtilsTest {
 //    }
 
     @Test
-//    @DisplayName("Addition test")
+//  @DisplayName("Addition test")
     void testEqualsAndNotEquals() {
         assertEquals(6, demoUtils.add(4, 2), "2+4 is 6");
         assertNotEquals(74, demoUtils.add(6, 1), "6+1 is not 74");
     }
 
     @Test
-//    @DisplayName("Nullable return type test")
+//  @DisplayName("Nullable return type test")
     void testNullAndNotNull() {
         assertNull(demoUtils.checkNull(null), "Return should be null");
         assertNotNull(demoUtils.checkNull("null"), "Return shouldn't be null");
@@ -81,12 +82,14 @@ class DemoUtilsTest {
     }
 
     @Test
+    @EnabledIfSystemProperty(named = "SYS-PROP", matches = "CI_CD_DEPLOY")
     void testTrueAndFalse() {
         assertTrue(demoUtils.isGreater(1, -2), "Must be true");
         assertFalse(demoUtils.isGreater(5, 5), "Must be false");
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "ENV_VAR", matches = "DEV")
     void testArrayEquals() {
         String[] testArray = new String[]{"A", "B", "C"};
 
@@ -94,6 +97,8 @@ class DemoUtilsTest {
     }
 
     @Test
+    @EnabledOnOs(OS.WINDOWS)
+    @EnabledForJreRange(min = JRE.JAVA_10)
     void testIterableEquals() {
         List<String> testList = List.of("luv", "2", "code");
 
@@ -101,6 +106,7 @@ class DemoUtilsTest {
     }
 
     @Test
+    @EnabledForJreRange(min = JRE.JAVA_17, max = JRE.JAVA_21)
     void testLinesEquals() {
         List<String> testList = List.of("luv", "2", "code");
 
@@ -108,6 +114,7 @@ class DemoUtilsTest {
     }
 
     @Test
+    @EnabledOnOs({OS.LINUX, OS.MAC})
     void testExceptionThrow() {
 
         assertThrows(Exception.class, () -> demoUtils.throwException(-1), "Must throw Exception.class");
@@ -116,9 +123,14 @@ class DemoUtilsTest {
     }
 
     @Test
+    @Disabled
     void testTimeout() {
-
         assertTimeout(Duration.ofSeconds(3), () -> demoUtils.checkTimeout(), "Should not last that long");
     }
 
+    @Test
+    @EnabledOnJre(JRE.JAVA_21)
+    void testMultiplyEquals() {
+        assertEquals(8, demoUtils.multiply(2, 4), "Multiplication must return 8");
+    }
 }
