@@ -32,8 +32,7 @@ class DemoUtilsTest {
         private String replaceCapitals(String name) {
             name = name.replaceAll("([A-Z])", " $1");
             name = name.replaceAll("([0-9]+)", " $1");
-            if (name.startsWith("test"))
-                name = name.substring(5);
+            name = name.substring(0, 1).toUpperCase() + name.substring(1);
             return name;
         }
     }
@@ -82,14 +81,13 @@ class DemoUtilsTest {
     }
 
     @Test
-    @EnabledIfSystemProperty(named = "SYS-PROP", matches = "CI_CD_DEPLOY")
+//  @EnabledIfSystemProperty(named = "SYS-PROP", matches = "CI_CD_DEPLOY")
     void testTrueAndFalse() {
         assertTrue(demoUtils.isGreater(1, -2), "Must be true");
         assertFalse(demoUtils.isGreater(5, 5), "Must be false");
     }
 
     @Test
-    @EnabledIfEnvironmentVariable(named = "ENV_VAR", matches = "DEV")
     void testArrayEquals() {
         String[] testArray = new String[]{"A", "B", "C"};
 
@@ -123,7 +121,6 @@ class DemoUtilsTest {
     }
 
     @Test
-    @Disabled
     void testTimeout() {
         assertTimeout(Duration.ofSeconds(3), () -> demoUtils.checkTimeout(), "Should not last that long");
     }
