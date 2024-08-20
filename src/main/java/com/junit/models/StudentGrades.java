@@ -9,35 +9,23 @@ import java.util.List;
 @Component
 public class StudentGrades {
 
-    List<Double> mathGradeResults;
-    /*
-     * CAN HAVE MULTIPLE DIFFERENT TYPES OF GRADES
-     * FOR 2.x WE WILL ONLY HAVE A MATH GRADE
-     *  */
+    private List<Grade> mathGradeResults;
 
-    public StudentGrades() {
-    }
+    private List<Grade> scienceGradeResults;
 
-    public StudentGrades(List<Double> mathGradeResults) {
-        this.mathGradeResults = mathGradeResults;
-        /*
-        Add other subject grades here in future lessons
-        */
-    }
+    private List<Grade> historyGradeResults;
 
-        /*
-        Add other subject grades here in future lessons
-        */
+    public StudentGrades() {}
 
-    public double addGradeResultsForSingleClass(List<Double> grades) {
+    public double addGradeResultsForSingleClass(List<Grade> grades) {
         double result = 0;
-        for (double i : grades) {
-            result += i;
+        for (Grade i : grades) {
+            result += i.getGrade();
         }
         return result;
     }
 
-    public double findGradePointAverage (List<Double> grades ) {
+    public double findGradePointAverage (List<Grade> grades ) {
         int lengthOfGrades = grades.size();
         double sum = addGradeResultsForSingleClass(grades);
         double result = sum / lengthOfGrades;
@@ -49,26 +37,28 @@ public class StudentGrades {
 
     }
 
-    public Boolean isGradeGreater(double gradeOne, double gradeTwo) {
-        if (gradeOne > gradeTwo) {
-            return true;
-        }
-        return false;
-    }
-
-    public Object checkNull(Object obj) {
-        if ( obj != null ) {
-            return obj;
-        }
-        return null;
-    }
-
-    public List<Double> getMathGradeResults() {
+    public List<Grade> getMathGradeResults() {
         return mathGradeResults;
     }
 
-    public void setMathGradeResults(List<Double> mathGradeResults) {
+    public void setMathGradeResults(List<Grade> mathGradeResults) {
         this.mathGradeResults = mathGradeResults;
+    }
+
+    public List<Grade> getScienceGradeResults() {
+        return scienceGradeResults;
+    }
+
+    public void setScienceGradeResults(List<Grade> scienceGradeResults) {
+        this.scienceGradeResults = scienceGradeResults;
+    }
+
+    public List<Grade> getHistoryGradeResults() {
+        return historyGradeResults;
+    }
+
+    public void setHistoryGradeResults(List<Grade> historyGradeResults) {
+        this.historyGradeResults = historyGradeResults;
     }
 
     @Override

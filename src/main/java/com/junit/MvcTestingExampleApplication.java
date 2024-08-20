@@ -1,8 +1,7 @@
 package com.junit;
 
-import com.junit.dao.ApplicationDao;
-import com.junit.models.CollegeStudent;
-import com.junit.service.ApplicationService;
+import com.junit.models.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -15,20 +14,37 @@ public class MvcTestingExampleApplication {
 		SpringApplication.run(MvcTestingExampleApplication.class, args);
 	}
 
-	@Bean(name = "applicationExample")
-	ApplicationService getApplicationService() {
-		return new ApplicationService();
-	}
-
-	@Bean(name = "applicationDao")
-	ApplicationDao getApplicationDao() {
-		return new ApplicationDao();
-	}
-
-	@Bean(name = "collegeStudent")
+	@Bean
 	@Scope(value = "prototype")
 	CollegeStudent getCollegeStudent() {
 		return new CollegeStudent();
+	}
+
+	@Bean
+	@Scope(value = "prototype")
+	Grade getMathGrade(double grade) {
+		return new MathGrade(grade);
+	}
+
+	@Bean
+	@Scope(value = "prototype")
+	@Qualifier("mathGrades")
+	MathGrade getGrade() {
+		return new MathGrade();
+	}
+
+	@Bean
+	@Scope(value = "prototype")
+	@Qualifier("scienceGrades")
+	ScienceGrade getScienceGrade() {
+		return new ScienceGrade();
+	}
+
+	@Bean
+	@Scope(value = "prototype")
+	@Qualifier("historyGrades")
+	HistoryGrade getHistoryGrade() {
+		return new HistoryGrade();
 	}
 
 }

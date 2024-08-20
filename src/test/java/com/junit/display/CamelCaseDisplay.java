@@ -1,10 +1,10 @@
-package com.junit;
+package com.junit.display;
 
 import org.junit.jupiter.api.DisplayNameGenerator;
 
 import java.lang.reflect.Method;
 
-class CamelCaseDisplay extends DisplayNameGenerator.Standard {
+public class CamelCaseDisplay extends DisplayNameGenerator.Standard {
 
     public CamelCaseDisplay() {
     }
