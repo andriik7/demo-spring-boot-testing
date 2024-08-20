@@ -1,9 +1,15 @@
 package com.junit.models;
 
 public class CollegeStudent implements Student {
+
+    private int id;
+
     private String firstname;
+
     private String lastname;
+
     private String emailAddress;
+
     private StudentGrades studentGrades;
 
     public CollegeStudent() {
@@ -13,6 +19,14 @@ public class CollegeStudent implements Student {
         this.firstname = firstname;
         this.lastname = lastname;
         this.emailAddress = emailAddress;
+    }
+
+    private int getId() {
+        return id;
+    }
+
+    private void setId(int id) {
+        this.id = id;
     }
 
     public String getFirstname() {
@@ -66,4 +80,9 @@ public class CollegeStudent implements Student {
     public String getFullName() {
         return getFirstname() + " " + getLastname();
     }
+
+    private String getFirstNameAndId() {
+        return getFirstname() + " " + getId();
+    }
+
 }
