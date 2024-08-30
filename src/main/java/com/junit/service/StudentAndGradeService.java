@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -160,5 +161,52 @@ public class StudentAndGradeService {
         studentGrades.setScienceGradeResults(genericScienceGrades);
 
         return new GradebookCollegeStudent(student.getId(), student.getFirstname(), student.getLastname(), student.getEmailAddress(), studentGrades);
+    }
+
+    public void updateStudentInfoInModel(int studentId, Model m) {
+        GradebookCollegeStudent gradebookCollegeStudent = studentInformation(studentId);
+        m.addAttribute("student", gradebookCollegeStudent);
+
+        StudentGrades grades = gradebookCollegeStudent.getStudentGrades();
+
+        if (!grades.getMathGradeResults().isEmpty()) {
+            m.addAttribute("mathAverage",
+                    grades.findGradePointAverage(grades.getMathGradeResults()));
+        } else {
+            m.addAttribute("mathAverage", "N/A");
+        }
+        if (!grades.getHistoryGradeResults().isEmpty()) {
+            m.addAttribute("historyAverage",
+                    grades.findGradePointAverage(grades.getHistoryGradeResults()));
+        } else {
+            m.addAttribute("historyAverage", "N/A");
+        }
+        if (!grades.getScienceGradeResults().isEmpty()) {
+            m.addAttribute("scienceAverage",
+                    grades.findGradePointAverage(grades.getScienceGradeResults()));
+        } else {
+            m.addAttribute("scienceAverage", "N/A");
+        }
+    }
+
+    public void setAppropriateGradeByGradeType(Grade grade, int gradeId, String gradeType) {
+
+        switch (gradeType) {
+            case "math" -> {
+                Optional<MathGrade> mathGrade = mathGradeDao.findById(gradeId);
+                if (mathGrade.isEmpty()) break;
+                grade = mathGrade.get();
+            }
+            case "history" -> {
+                Optional<HistoryGrade> historyGrade = historyGradeDao.findById(gradeId);
+                if (historyGrade.isEmpty()) break;
+                grade = historyGrade.get();
+            }
+            case "science" -> {
+                Optional<ScienceGrade> scienceGrade = scienceGradeDao.findById(gradeId);
+                if (scienceGrade.isEmpty()) break;
+                grade = scienceGrade.get();
+            }
+        }
     }
 }

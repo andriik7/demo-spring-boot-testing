@@ -11,6 +11,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
@@ -23,7 +24,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestPropertySource("/application.properties")
+@TestPropertySource("/application-test.properties")
 @SpringBootTest
 @DisplayNameGeneration(CamelCaseDisplay.class)
 @TestMethodOrder(MethodOrderer.DisplayName.class)
@@ -47,24 +48,45 @@ public class StudentAndGradeServiceTest {
     @Autowired
     private ScienceGradeDao scienceGradeDao;
 
+    @Value("${sql.script.create.student}")
+    private String createStudentScript;
+
+    @Value("${sql.script.delete.student}")
+    private String deleteStudentScript;
+
+    @Value("${sql.script.create.math.grade}")
+    private String createMathGradeScript;
+
+    @Value("${sql.script.create.history.grade}")
+    private String createHistoryGradeScript;
+
+    @Value("${sql.script.create.science.grade}")
+    private String createScienceGradeScript;
+
+    @Value("${sql.script.delete.math.grade}")
+    private String deleteMathGradeScript;
+
+    @Value("${sql.script.delete.history.grade}")
+    private String deleteHistoryGradeScript;
+
+    @Value("${sql.script.delete.science.grade}")
+    private String deleteScienceGradeScript;
+
+
     @BeforeEach
     public void beforeEach() {
-        jdbc.execute("insert into student(id, firstname, lastname, email_address) " +
-                "values(10, 'Andrii', 'Kuchera', 'ak47.10.07.06@gmail.com')");
-        jdbc.execute("insert into math_grade(id, student_id, grade) " +
-                "values(10, 10, 93.00)");
-        jdbc.execute("insert into history_grade(id, student_id, grade) " +
-                "values(10, 10, 78.00)");
-        jdbc.execute("insert into science_grade(id, student_id, grade) " +
-                "values(10, 10, 85.00)");
+        jdbc.execute(createStudentScript);
+        jdbc.execute(createMathGradeScript);
+        jdbc.execute(createHistoryGradeScript);
+        jdbc.execute(createScienceGradeScript);
     }
 
     @AfterEach
     public void afterEach() {
-        jdbc.execute("DELETE FROM student");
-        jdbc.execute("DELETE FROM math_grade");
-        jdbc.execute("DELETE FROM science_grade");
-        jdbc.execute("DELETE FROM history_grade");
+        jdbc.execute(deleteStudentScript);
+        jdbc.execute(deleteMathGradeScript);
+        jdbc.execute(deleteHistoryGradeScript);
+        jdbc.execute(deleteScienceGradeScript);
     }
 
     @Test
